@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(astar_planner)
+SET(CMAKE_BUILD_TYPE Debug)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -12,6 +13,11 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  tf
+ pluginlib
+  costmap_2d
+##ldd libastar_planner.so
+
 )
 
 ## System dependencies are found with CMake's conventions
@@ -108,6 +114,7 @@ catkin_package(
 #  LIBRARIES dijstra_planner
 #  CATKIN_DEPENDS nav_core roscpp rospy std_msgs
 #  DEPENDS system_lib
+
 )
 
 ###########
@@ -118,11 +125,18 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 #  include
+  
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/
+  ${CMAKE_CURRENT_SOURCE_DIR}
   ${catkin_INCLUDE_DIRS}
 )
 
+set(SOURCES
+     src/astar_planner.cpp src/pathSplineSmoother/pathSplineSmoother.cpp
+
+)
 ## Declare a C++ library
-add_library(astar_planner src/astar_planner.cpp
+add_library(astar_planner src/astar_planner.cpp ${SOURCES}
  )
 
 ## Add cmake target dependencies of the library
